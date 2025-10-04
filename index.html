@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cartinha ✨</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg1:#f7eaff; --bg2:#ffe9f6;          /* NOVO: base pastel */
+  --accent:#f7b4dc; --accent-2:#c7b2ff;
+  --gold:#ffd86b; --ink:#8e63de; --muted:#7a668a;
+  --radius:26px;
+  --shadow:0 24px 60px rgba(54,6,61,.12), inset 0 0 0 1px rgba(255,255,255,.35);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:'Nunito',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--ink);
+  /* NOVO: gradiente pastel + padrão SVG de estrelas/luas */
+  background:
+    radial-gradient(120% 120% at 50% -10%, var(--bg1), var(--bg2)),
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">\
+  <g fill="none" opacity=".6">\
+    <path d="M60 8 l3 6 7 1-5 4 1 7-6-3-6 3 1-7-5-4 7-1z" stroke="%23d9c7ff"/>\
+    <circle cx="18" cy="24" r="2" fill="%23ffd6ef"/>\
+    <circle cx="100" cy="40" r="1.8" fill="%23ffd6ef"/>\
+    <path d="M28 92 a8 8 0 1 0 0.01 0" stroke="%23ffd86b"/>\
+  </g>\
+</svg>');
+  background-size:cover,120px 120px;
+  background-attachment:fixed,fixed;
+  background-blend-mode:normal;
+  display:grid; place-items:center; overflow:hidden;
+}
+
+/* A perspectiva fica na cena; quem gira é o .flip-inner */
+.scene{
+  perspective:1200px; perspective-origin:center;
+  width:min(600px,94vw); margin:14px;
+}
+
+/* Moldura clara combinando com o tema (antes era azul escuro) */
+.flip-card{
+  position:relative; width:100%; aspect-ratio:3/4; max-height:88vh;
+  border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; user-select:none;
+  background:linear-gradient(160deg,#fff4ff,#fbe7f4);             /* NOVO */
+}
+.flip-inner{
+  position:relative; width:100%; height:100%;
+  transform-style:preserve-3d; will-change:transform;
+  transition:transform .9s cubic-bezier(.22,.95,.3,1);
+}
+.flip-card.is-open .flip-inner{ transform:rotateY(180deg) }
+@media (prefers-reduced-motion: reduce){ .flip-inner{ transition:none } }
+
+.face{
+  position:absolute; inset:0; display:flex; justify-content:center; align-items:center;
+  border-radius:var(--radius);
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  overflow:hidden;
+}
+.front{ transform:rotateY(0deg); }
+.back { transform:rotateY(180deg); background:linear-gradient(180deg,#fff8ff,#f8ecff) }
+
+/* esconde a face não ativa → robusto pra Brave/zoom */
+.flip-card:not(.is-open) .back { opacity:0; pointer-events:none; transition:opacity .25s ease }
+.flip-card.is-open .front { opacity:0; pointer-events:none; transition:opacity .25s ease }
+
+/* nenhum filho espelha */
+.face *, .face *::before, .face *::after{
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+
+.media{ width:100%; height:100%; object-fit:contain; border-radius:var(--radius); }
+
+/* Botões */
+.cta-main,.cta-back{
+  position:absolute; left:50%; bottom:calc(16px + env(safe-area-inset-bottom)); transform:translateX(-50%);
+  padding:12px 20px; border:0; border-radius:18px; font-weight:900; cursor:pointer; color:#fff;
+  letter-spacing:.2px; box-shadow:0 12px 30px rgba(199,178,255,.35); z-index:3; font-family:'Baloo 2',cursive;
+  display:flex; align-items:center; gap:10px; text-align:center;
+}
+.cta-main{ background:linear-gradient(90deg,var(--accent),var(--accent-2)) }
+.cta-back{ background:linear-gradient(90deg,var(--accent-2),var(--accent)) }
+.cta-main:hover,.cta-back:hover{ filter:brightness(1.05) }
+
+footer{
+  position:fixed; left:0; right:0; bottom:8px; text-align:center;
+  font-size:12px; color:var(--muted); opacity:.85;
+}
+
+/* Confete (❤ ☽ ✦) */
+.confetti{ position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:50 }
+.confetti span{ position:absolute; font-size:clamp(16px,2.6vw,28px); opacity:.95; will-change:transform }
+@keyframes confettiFloat{
+  0%   { transform:translate(var(--x,0), -10%) rotate(0deg) }
+  100% { transform:translate(calc(var(--x,0) + 10px), 110%) rotate(360deg) }
+}
+</style>
+</head>
+<body>
+  <div class="scene" aria-live="polite">
+    <div class="flip-card" id="card" aria-label="Abrir cartinha" tabindex="0">
+      <div class="flip-inner">
+        <div class="face front">
+          <img id="front-img" class="media" alt="Frente da cartinha" />
+          <button class="cta-main btn btn-lg fw-bold shadow-lg" id="btn-open" type="button">
+            <i class="bi bi-gift-fill" aria-hidden="true"></i>
+            Clique aqui para receber sua lembrancinha
+          </button>
+        </div>
+        <div class="face back">
+          <img id="back-img" class="media" alt="Verso com mensagem de agradecimento" />
+          <button class="cta-back btn btn-lg fw-bold shadow-lg" id="btn-back" type="button">
+            <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+            Voltar para a frente
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center text-muted small">Feito com carinho em HTML + CSS + JS</footer>
+
+  <script>
+  // Flip estável (gira a .flip-inner)
+  const card     = document.getElementById('card');
+  const openBtn  = document.getElementById('btn-open');
+  const backBtn  = document.getElementById('btn-back');
+  function openCard(){ card.classList.add('is-open'); launchConfetti(); }
+  function closeCard(){ card.classList.remove('is-open'); }
+  openBtn.addEventListener('click', openCard);
+  backBtn.addEventListener('click', closeCard);
+  card.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openCard(); }
+    if(e.key === 'Escape') closeCard();
+  });
+
+  // Imagens com fallback + parâmetros
+  const params   = new URLSearchParams(location.search);
+  const frontImg = document.getElementById('front-img');
+  const backImg  = document.getElementById('back-img');
+  const defaultFront = 'frente.png';
+  const defaultBack  = 'verso.png';
+  const frontCandidates = [], backCandidates  = [];
+  const frontParam = params.get('img'), backParam  = params.get('back');
+  if(frontParam) frontCandidates.push(decodeURIComponent(frontParam));
+  if(backParam)  backCandidates.push(decodeURIComponent(backParam));
+  // placeholders para nunca ficar vazio
+  const PH_FRONT = 'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 800\"><rect width=\"100%\" height=\"100%\" rx=\"24\" fill=\"#fff4ff\"/><text x=\"50%\" y=\"50%\" fill=\"#c7b2ff\" font-family=\"Nunito, Arial\" font-size=\"22\" text-anchor=\"middle\">Adicione frente.png ou ?img=URL</text></svg>');
+  const PH_BACK  = 'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 800\"><rect width=\"100%\" height=\"100%\" rx=\"24\" fill=\"#fff8ff\"/><text x=\"50%\" y=\"50%\" fill=\"#f7b4dc\" font-family=\"Nunito, Arial\" font-size=\"22\" text-anchor=\"middle\">Adicione verso.png ou ?back=URL</text></svg>');
+  frontCandidates.push(defaultFront,'frente.jpg','frente.jpeg',PH_FRONT);
+  backCandidates.push(defaultBack,'verso.jpg','verso.jpeg',PH_BACK);
+  function loadWithFallback(imgEl, list){
+    const next = ()=>{ if(!list.length){ return; } imgEl.src = list.shift(); };
+    imgEl.addEventListener('error', next); next();
+  }
+  loadWithFallback(frontImg, frontCandidates);
+  loadWithFallback(backImg,  backCandidates);
+
+  // Confete Sailor (❤ ☽ ✦)
+  function launchConfetti(){
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const layer = document.createElement('div');
+    layer.className = 'confetti';
+    const glyphs = ['❤','☽','✦'], colors = ['#ff8ec6','#c7b2ff','#ffd86b'];
+    for(let i=0;i<70;i++){
+      const s = document.createElement('span');
+      s.textContent = glyphs[i % glyphs.length];
+      s.style.left = Math.random()*100+'%';
+      s.style.setProperty('--x',(Math.random()*40-20)+'px');
+      s.style.top  = '-10%';
+      s.style.color= colors[i % colors.length];
+      s.style.animation = `confettiFloat ${2.8 + Math.random()*1.6}s ease-out forwards`;
+      layer.appendChild(s);
+    }
+    document.body.appendChild(layer);
+    setTimeout(()=> layer.remove(), 4200);
+  }
+  </script>
+</body>
+</html>
