@@ -1,55 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cartinha ✨</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<title>Cartinha CyberMoon ✨</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
 :root{
-  --bg1:#f7eaff; --bg2:#ffe9f6;          /* NOVO: base pastel */
-  --accent:#f7b4dc; --accent-2:#c7b2ff;
-  --gold:#ffd86b; --ink:#8e63de; --muted:#7a668a;
-  --radius:26px;
-  --shadow:0 24px 60px rgba(54,6,61,.12), inset 0 0 0 1px rgba(255,255,255,.35);
+  /* Paleta */
+  --bg1:#f7eaff; --bg2:#ffe9f6;                 /* fundo pastel */
+  --night1:#171631; --night2:#0f0e25;           /* painel escuro */
+  --frame:#ffffff;                               /* moldura */
+  --accent1:#f7b4dc; --accent2:#c7b2ff;         /* botões */
+  --ink:#3b2b58; --muted:#7a668a;
+  --radius:24px;
 }
-*{box-sizing:border-box}
+
+/* ===== Fundo com corações + estrelinhas (denso) ===== */
 html,body{height:100%}
 body{
-  margin:0; font-family:'Nunito',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--ink);
-  /* NOVO: gradiente pastel + padrão SVG de estrelas/luas */
+  margin:0; color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
   background:
     radial-gradient(120% 120% at 50% -10%, var(--bg1), var(--bg2)),
+    /* padrão 1 */
     url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">\
-  <g fill="none" opacity=".6">\
-    <path d="M60 8 l3 6 7 1-5 4 1 7-6-3-6 3 1-7-5-4 7-1z" stroke="%23d9c7ff"/>\
-    <circle cx="18" cy="24" r="2" fill="%23ffd6ef"/>\
-    <circle cx="100" cy="40" r="1.8" fill="%23ffd6ef"/>\
-    <path d="M28 92 a8 8 0 1 0 0.01 0" stroke="%23ffd86b"/>\
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">\
+  <g opacity=".55">\
+    <text x="10" y="18" font-size="12" fill="%23cdb9ff">✦</text>\
+    <text x="44" y="14" font-size="10" fill="%23ffb5d9">❤</text>\
+    <text x="26" y="36" font-size="11" fill="%23d7c6ff">✦</text>\
+    <text x="60" y="32" font-size="10" fill="%23ffabc9">❤</text>\
+    <text x="14" y="58" font-size="12" fill="%23cdb9ff">✦</text>\
+    <text x="48" y="56" font-size="10" fill="%23ffb5d9">❤</text>\
+  </g>\
+</svg>'),
+    /* padrão 2 (offset para preencher mais) */
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">\
+  <g opacity=".45">\
+    <text x="6"  y="30" font-size="10" fill="%23ffb5d9">❤</text>\
+    <text x="30" y="10" font-size="12" fill="%23cdb9ff">✦</text>\
+    <text x="66" y="20" font-size="11" fill="%23d7c6ff">✦</text>\
+    <text x="32" y="62" font-size="10" fill="%23ffabc9">❤</text>\
+    <text x="70" y="64" font-size="12" fill="%23cdb9ff">✦</text>\
   </g>\
 </svg>');
-  background-size:cover,120px 120px;
-  background-attachment:fixed,fixed;
-  background-blend-mode:normal;
-  display:grid; place-items:center; overflow:hidden;
+  background-size: cover, 80px 80px, 80px 80px;
+  background-position: center, 0 0, 40px 40px;
+  background-attachment: fixed, fixed, fixed;
+  display:flex; flex-direction:column; align-items:center; min-height:100vh; overflow-x:hidden;
 }
 
-/* A perspectiva fica na cena; quem gira é o .flip-inner */
-.scene{
-  perspective:1200px; perspective-origin:center;
-  width:min(600px,94vw); margin:14px;
+/* ===== Wrapper ===== */
+.wrapper{
+  width:min(92vw, 430px);
+  display:flex; flex-direction:column; gap:14px;
+  margin-top:clamp(16px,6vh,48px);
 }
 
-/* Moldura clara combinando com o tema (antes era azul escuro) */
+/* Moldura + card */
+.card-frame{
+  background:var(--frame);
+  border-radius:calc(var(--radius) + 8px);
+  padding:12px;                                  /* espessura da moldura */
+  box-shadow:0 26px 60px rgba(41,16,73,.18);
+}
 .flip-card{
-  position:relative; width:100%; aspect-ratio:3/4; max-height:88vh;
-  border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; user-select:none;
-  background:linear-gradient(160deg,#fff4ff,#fbe7f4);             /* NOVO */
+  position:relative; width:100%; aspect-ratio:3/4;
+  border-radius:var(--radius); overflow:hidden; user-select:none;
+  background:linear-gradient(160deg,var(--night1),var(--night2));
 }
 .flip-inner{
   position:relative; width:100%; height:100%;
@@ -59,124 +79,122 @@ body{
 .flip-card.is-open .flip-inner{ transform:rotateY(180deg) }
 @media (prefers-reduced-motion: reduce){ .flip-inner{ transition:none } }
 
+/* Faces do card */
 .face{
-  position:absolute; inset:0; display:flex; justify-content:center; align-items:center;
-  border-radius:var(--radius);
-  backface-visibility:hidden; -webkit-backface-visibility:hidden;
-  overflow:hidden;
-}
-.front{ transform:rotateY(0deg); }
-.back { transform:rotateY(180deg); background:linear-gradient(180deg,#fff8ff,#f8ecff) }
-
-/* esconde a face não ativa → robusto pra Brave/zoom */
-.flip-card:not(.is-open) .back { opacity:0; pointer-events:none; transition:opacity .25s ease }
-.flip-card.is-open .front { opacity:0; pointer-events:none; transition:opacity .25s ease }
-
-/* nenhum filho espelha */
-.face *, .face *::before, .face *::after{
+  position:absolute; inset:0; display:grid; place-items:center;
+  padding:10px; border-radius:var(--radius);
   backface-visibility:hidden; -webkit-backface-visibility:hidden;
 }
+.face.front{ transform:rotateY(0deg) }
+.face.back { transform:rotateY(180deg); background:linear-gradient(180deg,#fff8ff,#f5ecff) }
 
-.media{ width:100%; height:100%; object-fit:contain; border-radius:var(--radius); }
+.media{ width:100%; height:100%; object-fit:contain; border-radius:var(--radius) }
 
-/* Botões */
-.cta-main,.cta-back{
-  position:absolute; left:50%; bottom:calc(16px + env(safe-area-inset-bottom)); transform:translateX(-50%);
-  padding:12px 20px; border:0; border-radius:18px; font-weight:900; cursor:pointer; color:#fff;
-  letter-spacing:.2px; box-shadow:0 12px 30px rgba(199,178,255,.35); z-index:3; font-family:'Baloo 2',cursive;
-  display:flex; align-items:center; gap:10px; text-align:center;
+/* ===== Barras de ação (fora do card) ===== */
+.actions{ display:flex; justify-content:center }
+.btn-cta{
+  background:linear-gradient(90deg,var(--accent1),var(--accent2));
+  color:#fff; border:0; border-radius:16px;
+  font-weight:800; padding:12px 18px; width:100%;
+  box-shadow:0 12px 28px rgba(199,178,255,.35);
+  transition:transform .15s ease, filter .15s ease;
 }
-.cta-main{ background:linear-gradient(90deg,var(--accent),var(--accent-2)) }
-.cta-back{ background:linear-gradient(90deg,var(--accent-2),var(--accent)) }
-.cta-main:hover,.cta-back:hover{ filter:brightness(1.05) }
+.btn-cta:hover{ filter:brightness(1.05) }
+.btn-cta:active{ transform:scale(.98) }
 
-footer{
-  position:fixed; left:0; right:0; bottom:8px; text-align:center;
-  font-size:12px; color:var(--muted); opacity:.85;
-}
+/* Rodapé */
+footer{ margin-top:auto; padding:12px 0 18px; text-align:center; color:var(--muted); font-size:.9rem }
 
-/* Confete (❤ ☽ ✦) */
+/* ===== Confete ===== */
 .confetti{ position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:50 }
 .confetti span{ position:absolute; font-size:clamp(16px,2.6vw,28px); opacity:.95; will-change:transform }
 @keyframes confettiFloat{
-  0%   { transform:translate(var(--x,0), -10%) rotate(0deg) }
-  100% { transform:translate(calc(var(--x,0) + 10px), 110%) rotate(360deg) }
+  0%   { transform:translate(var(--x,0), -10%) rotate(0deg); opacity:1 }
+  100% { transform:translate(calc(var(--x,0) + 10px), 110%) rotate(360deg); opacity:0 }
 }
 </style>
 </head>
+
 <body>
-  <div class="scene" aria-live="polite">
-    <div class="flip-card" id="card" aria-label="Abrir cartinha" tabindex="0">
-      <div class="flip-inner">
-        <div class="face front">
-          <img id="front-img" class="media" alt="Frente da cartinha" />
-          <button class="cta-main btn btn-lg fw-bold shadow-lg" id="btn-open" type="button">
-            <i class="bi bi-gift-fill" aria-hidden="true"></i>
-            Clique aqui para receber sua lembrancinha
-          </button>
-        </div>
-        <div class="face back">
-          <img id="back-img" class="media" alt="Verso com mensagem de agradecimento" />
-          <button class="cta-back btn btn-lg fw-bold shadow-lg" id="btn-back" type="button">
-            <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
-            Voltar para a frente
-          </button>
+  <main class="wrapper" aria-live="polite">
+    <!-- Moldura branca + card escuro -->
+    <div class="card-frame">
+      <div class="flip-card" id="card" aria-label="Abrir cartinha" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front">
+            <img class="media" src="frente.png" alt="Frente da cartinha" />
+          </div>
+          <div class="face back">
+            <img class="media" src="verso.png" alt="Mensagem de agradecimento" />
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <footer class="text-center text-muted small">Feito com carinho em HTML + CSS + JS</footer>
+    <!-- Botão abrir (fora do card) -->
+    <div class="actions" id="actions-front">
+      <button class="btn-cta" id="btn-open">🎁 Clique aqui para receber sua lembrancinha</button>
+    </div>
+
+    <!-- Botão voltar (fora do card) -->
+    <div class="actions" id="actions-back" hidden>
+      <button class="btn-cta" id="btn-back">🔄 Voltar para a frente</button>
+    </div>
+  </main>
+
+  <footer>Feito com carinho pela Gabi💫</footer>
 
   <script>
-  // Flip estável (gira a .flip-inner)
-  const card     = document.getElementById('card');
-  const openBtn  = document.getElementById('btn-open');
-  const backBtn  = document.getElementById('btn-back');
-  function openCard(){ card.classList.add('is-open'); launchConfetti(); }
-  function closeCard(){ card.classList.remove('is-open'); }
-  openBtn.addEventListener('click', openCard);
-  backBtn.addEventListener('click', closeCard);
-  card.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openCard(); }
-    if(e.key === 'Escape') closeCard();
-  });
+  // Referências
+  const card = document.getElementById('card');
+  const btnOpen = document.getElementById('btn-open');
+  const btnBack = document.getElementById('btn-back');
+  const actionsFront = document.getElementById('actions-front');
+  const actionsBack  = document.getElementById('actions-back');
 
-  // Imagens com fallback + parâmetros
-  const params   = new URLSearchParams(location.search);
-  const frontImg = document.getElementById('front-img');
-  const backImg  = document.getElementById('back-img');
-  const defaultFront = 'frente.png';
-  const defaultBack  = 'verso.png';
-  const frontCandidates = [], backCandidates  = [];
-  const frontParam = params.get('img'), backParam  = params.get('back');
-  if(frontParam) frontCandidates.push(decodeURIComponent(frontParam));
-  if(backParam)  backCandidates.push(decodeURIComponent(backParam));
-  // placeholders para nunca ficar vazio
-  const PH_FRONT = 'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 800\"><rect width=\"100%\" height=\"100%\" rx=\"24\" fill=\"#fff4ff\"/><text x=\"50%\" y=\"50%\" fill=\"#c7b2ff\" font-family=\"Nunito, Arial\" font-size=\"22\" text-anchor=\"middle\">Adicione frente.png ou ?img=URL</text></svg>');
-  const PH_BACK  = 'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 800\"><rect width=\"100%\" height=\"100%\" rx=\"24\" fill=\"#fff8ff\"/><text x=\"50%\" y=\"50%\" fill=\"#f7b4dc\" font-family=\"Nunito, Arial\" font-size=\"22\" text-anchor=\"middle\">Adicione verso.png ou ?back=URL</text></svg>');
-  frontCandidates.push(defaultFront,'frente.jpg','frente.jpeg',PH_FRONT);
-  backCandidates.push(defaultBack,'verso.jpg','verso.jpeg',PH_BACK);
-  function loadWithFallback(imgEl, list){
-    const next = ()=>{ if(!list.length){ return; } imgEl.src = list.shift(); };
-    imgEl.addEventListener('error', next); next();
+  function showFrontUI(){
+    actionsFront.hidden = false;
+    actionsBack.hidden  = true;
   }
-  loadWithFallback(frontImg, frontCandidates);
-  loadWithFallback(backImg,  backCandidates);
+  function showBackUI(){
+    actionsFront.hidden = true;
+    actionsBack.hidden  = false;
+  }
+
+  function openCard(){
+    card.classList.add('is-open');
+    showBackUI();
+    launchConfetti();
+  }
+  function closeCard(){
+    card.classList.remove('is-open');
+    showFrontUI();
+  }
+
+  btnOpen.addEventListener('click', openCard);
+  btnBack.addEventListener('click', closeCard);
+
+  // Acessibilidade via teclado (Enter/Barra/Escape)
+  card.addEventListener('keydown', e=>{
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openCard(); }
+    if(e.key==='Escape') closeCard();
+  });
 
   // Confete Sailor (❤ ☽ ✦)
   function launchConfetti(){
     if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const layer = document.createElement('div');
     layer.className = 'confetti';
-    const glyphs = ['❤','☽','✦'], colors = ['#ff8ec6','#c7b2ff','#ffd86b'];
-    for(let i=0;i<70;i++){
+    const glyphs = ['❤','☽','✦'];
+    const colors = ['#ff8ec6','#c7b2ff','#ffd86b'];
+    const pieces = 80;
+    for(let i=0;i<pieces;i++){
       const s = document.createElement('span');
       s.textContent = glyphs[i % glyphs.length];
       s.style.left = Math.random()*100+'%';
-      s.style.setProperty('--x',(Math.random()*40-20)+'px');
-      s.style.top  = '-10%';
-      s.style.color= colors[i % colors.length];
+      s.style.setProperty('--x', (Math.random()*40-20)+'px');
+      s.style.top = '-10%';
+      s.style.color = colors[i % colors.length];
       s.style.animation = `confettiFloat ${2.8 + Math.random()*1.6}s ease-out forwards`;
       layer.appendChild(s);
     }
